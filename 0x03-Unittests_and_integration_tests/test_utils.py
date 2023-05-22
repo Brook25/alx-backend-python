@@ -34,26 +34,22 @@ class TestAccessNestedMap(unittest.TestCase):
 
 
 
-
 class TestGetJson(unittest.TestCase):
-    ''' get json unittest '''
+    """Tests the `get_json` function."""
     @parameterized.expand([
         ("http://example.com", {"payload": True}),
-        ("http://holberton.io", {"payload": False})
+        ("http://holberton.io", {"payload": False}),
     ])
-    def test_get_json(self, test_url, test_payload):
-        ''' self descriptive'''
-        class Mocked(Mock):
-            ''' mocked class'''
-
-            def json(self):
-                ''' json method mocked'''
-                return test_payload
-
-        with patch('requests.get') as MockClass:
-            MockClass.return_value = Mocked()
+    def test_get_json(
+            self,
+            test_url: str,
+            test_payload: Dict,
+            ) -> None:
+        """Tests `get_json`'s output."""
+        attrs = {'json.return_value': test_payload}
+        with patch("requests.get", return_value=Mock(**attrs)) as req_get:
             self.assertEqual(get_json(test_url), test_payload)
-
+            req_get.assert_called_once_with(test_url)
 
 
 
