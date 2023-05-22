@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Module contains a github org. client
+"""A github org client
 """
 from typing import (
     List,
@@ -14,45 +14,45 @@ from utils import (
 
 
 class GithubOrgClient:
-    """Class Github org. Clent
+    """A Githib org client
     """
-    original_URL = "https://api.github.com/orgs/{org}"
+    ORG_URL = "https://api.github.com/orgs/{org}"
 
     def __init__(self, org_name: str) -> None:
-        """init method to initialize an instance of GithubOrgClient"""
+        """Init method of GithubOrgClient"""
         self._org_name = org_name
 
     @memoize
     def org(self) -> Dict:
-        """method memoizes org."""
+        """Memoize org"""
         return get_json(self.ORG_URL.format(org=self._org_name))
 
     @property
     def _public_repos_url(self) -> str:
-        """mehtod returns public repos URL"""
+        """Public repos URL"""
         return self.org["repos_url"]
 
     @memoize
     def repos_payload(self) -> Dict:
-        """method to memoize repos payload"""
+        """Memoize repos payload"""
         return get_json(self._public_repos_url)
 
     def public_repos(self, license: str = None) -> List[str]:
-        """mehtod retuns public repos"""
-        json_pload = self.repos_payload
-        public_rep = [
-            repo["name"] for repo in json_pload
+        """Public repos"""
+        json_payload = self.repos_payload
+        public_repos = [
+            repo["name"] for repo in json_payload
             if license is None or self.has_license(repo, license)
         ]
 
-        return public_rep
+        return public_repos
 
     @staticmethod
     def has_license(repo: Dict[str, Dict], license_key: str) -> bool:
-        """method validates license"""
+        """Static: has_license"""
         assert license_key is not None, "license_key cannot be None"
         try:
-            check_license = access_nested_map(repo, ("license", "key")) == license_key
+            has_license = access_nested_map(repo, ("license", "key")) == license_key
         except KeyError:
             return False
-        return check_license
+        return has_license
