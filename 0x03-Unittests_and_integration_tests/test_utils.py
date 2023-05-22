@@ -54,28 +54,23 @@ class TestGetJson(unittest.TestCase):
 
 
 
-
 class TestMemoize(unittest.TestCase):
-    """mehtod to test for utils.memoize decorator
-    """
-    def test_memoize(self):
-        """method to test for utils.memoize
-        decorator by mocking a_method
-        """
+    """Class that tests the function memoize."""
+    def test_memoize(self) -> None:
+        """function tests the output of memoize"""
         class TestClass:
-            """Class for testing
-            """
             def a_method(self):
-                """returns a_method"""
                 return 42
 
             @memoize
             def a_property(self):
-                """returns a_property"""
                 return self.a_method()
-        with patch.object(TestClass, "a_method") as mck_a:
-            mck_a.return_value = True
-            tester = TestClass()
-            tester.a_property
-            tester.a_property
-            mck_a.assert_called_once()
+        with patch.object(
+                TestClass,
+                "a_method",
+                return_value=lambda: 42,
+                ) as memo_fxn:
+            test_class = TestClass()
+            self.assertEqual(test_class.a_property(), 42)
+            self.assertEqual(test_class.a_property(), 42)
+            memo_fxn.assert_called_once()
