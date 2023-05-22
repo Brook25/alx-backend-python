@@ -49,7 +49,7 @@ class TestGetJson(unittest.TestCase):
         mck_get.return_value.json.return_value = payload
         response = get_json(url)
         self.assertEqual(respnse, payload)
-        mock_get.stop()
+        mck_get.stop()
 
 
 class TestMemoize(unittest.TestCase):
