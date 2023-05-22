@@ -62,7 +62,8 @@ class TestMemoize(unittest.TestCase):
     """mehtod to test for utils.memoize decorator
     """
     def test_memoize(self):
-        """method to test for utils.memoize decorator by mocking a_method
+        """method to test for utils.memoize
+        decorator by mocking a_method
         """
         class TestClass:
             """Class for testing
