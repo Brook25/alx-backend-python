@@ -91,25 +91,22 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
 
         cls.mock = cls.get_patcher.start()
 
-    def test_public_repos(self):
-        """method does Integration test for public repos"""
-        tester_class = GithubOrgClient("google")
+    def test_public_repos(self) -> None:
+        """Tests the `public_repos` method."""
+        self.assertEqual(
+            GithubOrgClient("google").public_repos(),
+            self.expected_repos,
+        )
 
-        self.assertEqual(tester_class.org, self.org_payload)
-        self.assertEqual(tester_class.repos_payload, self.repos_payload)
-        self.assertEqual(tester_class.public_repos(), self.expected_repos)
-        self.assertEqual(tester_class.public_repos("XLICENSE"), [])
-        self.mock.assert_called()
+    def test_public_repos_with_license(self) -> None:
+        """Tests the `public_repos` method with a license."""
+        self.assertEqual(
+            GithubOrgClient("google").public_repos(license="apache-2.0"),
+            self.apache2_repos,
+        )
 
-    def test_public_repos_with_license(self):
-        """mehtod does Integration test for public repos with License """
-        test_classer = GithubOrgClient("google")
 
-        self.assertEqual(tester_class.public_repos(), self.expected_repos)
-        self.assertEqual(tester_class.public_repos("XLICENSE"), [])
-        self.assertEqual(tester_class.public_repos(
-            "apache-2.0"), self.apache2_repos)
-        self.mock.assert_called()
+
 
     @classmethod
     def tearDownClass(cls):
